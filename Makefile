@@ -10,7 +10,12 @@ rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(
 # Dev tools binaries and options
 #
 
-RGBDS   :=
+ifneq ($(wildcard rgbds/.*),)
+RGBDS := rgbds/
+else
+RGBDS :=
+endif
+
 
 2BPP    := $(RGBDS)rgbgfx
 
