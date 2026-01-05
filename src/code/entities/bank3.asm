@@ -2883,7 +2883,7 @@ HeartPieceState4Handler::
     call_open_dialog Dialog04F                    ;; 03:5A8A $3E $4F
     call IncrementEntityState                     ;; 03:5A8F $CD $12 $3B
     ld   a, $01                                   ;; 03:5A92 $3E $01
-    ld   [wC1AB], a                               ;; 03:5A94 $EA $AB $C1
+    ld   [wDialogInteractionLocked], a            ;; 03:5A94 $EA $AB $C1
     ret                                           ;; 03:5A97 $C9
 
 HeartPieceState5Handler::
@@ -2913,7 +2913,7 @@ HeartPieceState6Handler::
     ld   de, HeartPieceEntitySprite               ;; 03:5ABE $11 $4D $5A
     call RenderActiveEntitySpritesPair            ;; 03:5AC1 $CD $C0 $3B
     xor  a                                        ;; 03:5AC4 $AF
-    ld   [wC1AB], a                               ;; 03:5AC5 $EA $AB $C1
+    ld   [wDialogInteractionLocked], a            ;; 03:5AC5 $EA $AB $C1
     call DrawHeartPiecesInDialog                  ;; 03:5AC8 $CD $2B $5B
     ld   a, [wDialogState]                        ;; 03:5ACB $FA $9F $C1
     and  a                                        ;; 03:5ACE $A7

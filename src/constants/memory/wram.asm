@@ -797,8 +797,9 @@ wDialogGotItem::
 wDialogGotItemCountdown::
   ds 1 ; C1AA
 
-; Unlabeled
-wC1AB::
+; When this value is non-zero the player cannot interact with dialog boxes (press button to advance/close)
+; This is only used by the heart piece dialog interaction in the base game.
+wDialogInteractionLocked::
   ds 1 ; C1AB
 
 ; Unlabeled

@@ -290,8 +290,8 @@ IncrementDialogStateAndReturn::
     ret                                           ;; 00:2489 $C9
 
 DialogFinishedHandler::
-    ; If wC1AB == 0...
-    ld   a, [wC1AB]                               ;; 00:248A $FA $AB $C1
+    ; If wDialogInteractionLocked, ignore input
+    ld   a, [wDialogInteractionLocked]            ;; 00:248A $FA $AB $C1
     and  a                                        ;; 00:248D $A7
     jr   nz, UpdateDialogState_return             ;; 00:248E $20 $1E
     ; ... and A or B is pressed...
