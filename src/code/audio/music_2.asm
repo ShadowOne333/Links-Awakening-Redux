@@ -10,7 +10,7 @@ PlayMusicTrack_1E::
     jp   PlayMusicTrack_1E_EntryPoint             ;; 1E:4006 $C3 $1E $40
 
 label_01E_4009:
-    ld   hl, wMusicTranspose                      ;; 1E:4009 $21 $00 $D3
+    ld   hl, wAudioSection                        ;; 1E:4009 $21 $00 $D3
 
 .loop_400C
     ld   [hl], $00                                ;; 1E:400C $36 $00
@@ -384,9 +384,9 @@ label_01E_432F:
     ldh  [rNR30], a                               ;; 1E:4337 $E0 $1A
     ld   [wD3E7], a                               ;; 1E:4339 $EA $E7 $D3
     push hl                                       ;; 1E:433C $E5
-    ld   a, [wD330 + 6]                           ;; 1E:433D $FA $36 $D3
+    ld   a, [wMusicChannel3.waveformPointerLow]   ;; 1E:433D $FA $36 $D3
     ld   l, a                                     ;; 1E:4340 $6F
-    ld   a, [wD330 + 7]                           ;; 1E:4341 $FA $37 $D3
+    ld   a, [wMusicChannel3.waveformPointerHigh]  ;; 1E:4341 $FA $37 $D3
     ld   h, a                                     ;; 1E:4344 $67
     push bc                                       ;; 1E:4345 $C5
     ld   c, $30                                   ;; 1E:4346 $0E $30
@@ -541,28 +541,28 @@ func_01E_43C0::
     ld   [de], a                                  ;; 1E:43EB $12
     inc  e                                        ;; 1E:43EC $1C
     call func_01E_43BA                            ;; 1E:43ED $CD $BA $43
-    ld   de, wD310                                ;; 1E:43F0 $11 $10 $D3
+    ld   de, wMusicChannel1                       ;; 1E:43F0 $11 $10 $D3
     call func_01E_43BA                            ;; 1E:43F3 $CD $BA $43
-    ld   de, wD320                                ;; 1E:43F6 $11 $20 $D3
+    ld   de, wMusicChannel2                       ;; 1E:43F6 $11 $20 $D3
     call func_01E_43BA                            ;; 1E:43F9 $CD $BA $43
-    ld   de, wD330                                ;; 1E:43FC $11 $30 $D3
+    ld   de, wMusicChannel3                       ;; 1E:43FC $11 $30 $D3
     call func_01E_43BA                            ;; 1E:43FF $CD $BA $43
-    ld   de, wD340                                ;; 1E:4402 $11 $40 $D3
+    ld   de, wMusicChannel4                       ;; 1E:4402 $11 $40 $D3
     call func_01E_43BA                            ;; 1E:4405 $CD $BA $43
-    ld   hl, wD310                                ;; 1E:4408 $21 $10 $D3
-    ld   de, wD314                                ;; 1E:440B $11 $14 $D3
+    ld   hl, wMusicChannel1                       ;; 1E:4408 $21 $10 $D3
+    ld   de, wMusicChannel1.definitionPointerLow  ;; 1E:440B $11 $14 $D3
     call func_01E_43AF                            ;; 1E:440E $CD $AF $43
-    ld   hl, wD320                                ;; 1E:4411 $21 $20 $D3
-    ld   de, wD320 + 4                            ;; 1E:4414 $11 $24 $D3
+    ld   hl, wMusicChannel2                       ;; 1E:4411 $21 $20 $D3
+    ld   de, wMusicChannel2.definitionPointerLow  ;; 1E:4414 $11 $24 $D3
     call func_01E_43AF                            ;; 1E:4417 $CD $AF $43
-    ld   hl, wD330 + 0                            ;; 1E:441A $21 $30 $D3
-    ld   de, wD330 + 4                            ;; 1E:441D $11 $34 $D3
+    ld   hl, wMusicChannel3                       ;; 1E:441A $21 $30 $D3
+    ld   de, wMusicChannel3.definitionPointerLow  ;; 1E:441D $11 $34 $D3
     call func_01E_43AF                            ;; 1E:4420 $CD $AF $43
-    ld   hl, wD340                                ;; 1E:4423 $21 $40 $D3
-    ld   de, wD344                                ;; 1E:4426 $11 $44 $D3
+    ld   hl, wMusicChannel4                       ;; 1E:4423 $21 $40 $D3
+    ld   de, wMusicChannel4.definitionPointerLow  ;; 1E:4426 $11 $44 $D3
     call func_01E_43AF                            ;; 1E:4429 $CD $AF $43
     ld   bc, $410                                 ;; 1E:442C $01 $10 $04
-    ld   hl, wD312                                ;; 1E:442F $21 $12 $D3
+    ld   hl, wMusicChannel1.lengthCountdown       ;; 1E:442F $21 $12 $D3
 
 .loop_4432
     ld   [hl], $01                                ;; 1E:4432 $36 $01
@@ -573,9 +573,9 @@ func_01E_43C0::
     jr   nz, .loop_4432                           ;; 1E:4438 $20 $F8
 
     xor  a                                        ;; 1E:443A $AF
-    ld   [wD31E], a                               ;; 1E:443B $EA $1E $D3
-    ld   [wD320 + $0E], a                         ;; 1E:443E $EA $2E $D3
-    ld   [wD330 + $0E], a                         ;; 1E:4441 $EA $3E $D3
+    ld   [wMusicChannel1.lengthCounterUp], a      ;; 1E:443B $EA $1E $D3
+    ld   [wMusicChannel2.lengthCounterUp], a      ;; 1E:443E $EA $2E $D3
+    ld   [wMusicChannel3.lengthCounterUp], a      ;; 1E:4441 $EA $3E $D3
     ret                                           ;; 1E:4444 $C9
 
 jr_01E_4445:
@@ -670,7 +670,7 @@ label_01E_44A6:
     cp   $03                                      ;; 1E:44A9 $FE $03
     jr   nz, .jr_44BD                             ;; 1E:44AB $20 $10
 
-    ld   a, [wD330 + $08]                         ;; 1E:44AD $FA $38 $D3
+    ld   a, [wMusicChannel3.volumeEffect]         ;; 1E:44AD $FA $38 $D3
     bit  7, a                                     ;; 1E:44B0 $CB $7F
     jr   z, .jr_44BD                              ;; 1E:44B2 $28 $09
 
@@ -848,7 +848,7 @@ func_01E_4581::
 
     ld   a, $01                                   ;; 1E:4591 $3E $01
     ld   [wActiveChannelIndex], a                 ;; 1E:4593 $EA $50 $D3
-    ld   hl, wD310                                ;; 1E:4596 $21 $10 $D3
+    ld   hl, wMusicChannel1                       ;; 1E:4596 $21 $10 $D3
 
 label_01E_4599:
     inc  l                                        ;; 1E:4599 $2C
@@ -1092,7 +1092,7 @@ label_01E_46BD:
     jr   nz, .loop                                ;; 1E:46D0 $20 $F8
 
     ld   c, $20                                   ;; 1E:46D2 $0E $20
-    ld   hl, wD344                                ;; 1E:46D4 $21 $44 $D3
+    ld   hl, wMusicChannel4.definitionPointerLow  ;; 1E:46D4 $21 $44 $D3
     ld   b, $00                                   ;; 1E:46D7 $06 $00
     jr   jr_01E_471C                              ;; 1E:46D9 $18 $41
 
@@ -1118,7 +1118,7 @@ jr_01E_46EE:
     jr   z, jr_01E_4715                           ;; 1E:46FA $28 $19
 
     ld   c, $1A                                   ;; 1E:46FC $0E $1A
-    ld   a, [wD330 + $0F]                         ;; 1E:46FE $FA $3F $D3
+    ld   a, [wMusicChannel3.loopCounter]          ;; 1E:46FE $FA $3F $D3
     bit  7, a                                     ;; 1E:4701 $CB $7F
     jr   nz, .jr_470A                             ;; 1E:4703 $20 $05
 
@@ -1216,11 +1216,11 @@ label_01E_4752:
     jp   label_01E_4599                           ;; 1E:4760 $C3 $99 $45
 
 .jr_4763
-    ld   hl, wD31E                                ;; 1E:4763 $21 $1E $D3
+    ld   hl, wMusicChannel1.lengthCounterUp       ;; 1E:4763 $21 $1E $D3
     inc  [hl]                                     ;; 1E:4766 $34
-    ld   hl, wD320 + $0E                          ;; 1E:4767 $21 $2E $D3
+    ld   hl, wMusicChannel2.lengthCounterUp       ;; 1E:4767 $21 $2E $D3
     inc  [hl]                                     ;; 1E:476A $34
-    ld   hl, wD330 + $0E                          ;; 1E:476B $21 $3E $D3
+    ld   hl, wMusicChannel3.lengthCounterUp       ;; 1E:476B $21 $3E $D3
     inc  [hl]                                     ;; 1E:476E $34
     ret                                           ;; 1E:476F $C9
 
@@ -1313,51 +1313,51 @@ jr_01E_47D6:
     jp   label_01E_4794                           ;; 1E:47F3 $C3 $94 $47
 
 func_01E_47F6::
-    ld   a, [wD31B]                               ;; 1E:47F6 $FA $1B $D3
+    ld   a, [wMusicChannel1.playingRest]          ;; 1E:47F6 $FA $1B $D3
     and  a                                        ;; 1E:47F9 $A7
     jr   nz, .jr_481D                             ;; 1E:47FA $20 $21
 
-    ld   a, [wD317]                               ;; 1E:47FC $FA $17 $D3
+    ld   a, [wMusicChannel1.softwareEnvelope]     ;; 1E:47FC $FA $17 $D3
     and  a                                        ;; 1E:47FF $A7
     jr   z, .jr_481D                              ;; 1E:4800 $28 $1B
 
     and  $0F                                      ;; 1E:4802 $E6 $0F
     ld   b, a                                     ;; 1E:4804 $47
     ld   hl, wD307                                ;; 1E:4805 $21 $07 $D3
-    ld   a, [wD31E]                               ;; 1E:4808 $FA $1E $D3
+    ld   a, [wMusicChannel1.lengthCounterUp]      ;; 1E:4808 $FA $1E $D3
     cp   [hl]                                     ;; 1E:480B $BE
     jr   nz, .jr_481D                             ;; 1E:480C $20 $0F
 
     ld   c, $12                                   ;; 1E:480E $0E $12
-    ld   de, wD31A                                ;; 1E:4810 $11 $1A $D3
-    ld   a, [wD31F]                               ;; 1E:4813 $FA $1F $D3
+    ld   de, wMusicChannel1.noteBaseFrequencyHigh ;; 1E:4810 $11 $1A $D3
+    ld   a, [wMusicChannel1.loopCounter]          ;; 1E:4813 $FA $1F $D3
     bit  7, a                                     ;; 1E:4816 $CB $7F
     jr   nz, .jr_481D                             ;; 1E:4818 $20 $03
 
     call func_01E_4841                            ;; 1E:481A $CD $41 $48
 
 .jr_481D
-    ld   a, [wD320 + $0B]                         ;; 1E:481D $FA $2B $D3
+    ld   a, [wMusicChannel2.playingRest]          ;; 1E:481D $FA $2B $D3
     and  a                                        ;; 1E:4820 $A7
     ret  nz                                       ;; 1E:4821 $C0
 
-    ld   a, [wD320 + $07]                         ;; 1E:4822 $FA $27 $D3
+    ld   a, [wMusicChannel2.softwareEnvelope]     ;; 1E:4822 $FA $27 $D3
     and  a                                        ;; 1E:4825 $A7
     ret  z                                        ;; 1E:4826 $C8
 
     and  $0F                                      ;; 1E:4827 $E6 $0F
     ld   b, a                                     ;; 1E:4829 $47
     ld   hl, wD308                                ;; 1E:482A $21 $08 $D3
-    ld   a, [wD320 + $0E]                         ;; 1E:482D $FA $2E $D3
+    ld   a, [wMusicChannel2.lengthCounterUp]      ;; 1E:482D $FA $2E $D3
     cp   [hl]                                     ;; 1E:4830 $BE
     ret  nz                                       ;; 1E:4831 $C0
 
-    ld   a, [wD320 + $0F]                         ;; 1E:4832 $FA $2F $D3
+    ld   a, [wMusicChannel2.loopCounter]          ;; 1E:4832 $FA $2F $D3
     bit  7, a                                     ;; 1E:4835 $CB $7F
     ret  nz                                       ;; 1E:4837 $C0
 
     ld   c, $17                                   ;; 1E:4838 $0E $17
-    ld   de, wD320 + $0A                          ;; 1E:483A $11 $2A $D3
+    ld   de, wMusicChannel2.noteBaseFrequencyHigh ;; 1E:483A $11 $2A $D3
     call func_01E_4841                            ;; 1E:483D $CD $41 $48
     ret                                           ;; 1E:4840 $C9
 
@@ -1690,9 +1690,9 @@ func_01E_4D2A::
     xor  a                                        ;; 1E:4D2A $AF
     ld   [wD361], a                               ;; 1E:4D2B $EA $61 $D3
     ld   [wD371], a                               ;; 1E:4D2E $EA $71 $D3
-    ld   [wD31F], a                               ;; 1E:4D31 $EA $1F $D3
-    ld   [wD320 + $0F], a                         ;; 1E:4D34 $EA $2F $D3
-    ld   [wD330 + $0F], a                         ;; 1E:4D37 $EA $3F $D3
+    ld   [wMusicChannel1.loopCounter], a          ;; 1E:4D31 $EA $1F $D3
+    ld   [wMusicChannel2.loopCounter], a          ;; 1E:4D34 $EA $2F $D3
+    ld   [wMusicChannel3.loopCounter], a          ;; 1E:4D37 $EA $3F $D3
     ld   [wD39E], a                               ;; 1E:4D3A $EA $9E $D3
     ld   [wD39F], a                               ;; 1E:4D3D $EA $9F $D3
     ld   [wActiveMusicTableIndex], a              ;; 1E:4D40 $EA $D9 $D3

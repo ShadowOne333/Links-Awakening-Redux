@@ -41,9 +41,9 @@ BeginJingleTreasureFound::
     ldh  [rNR30], a                               ;; 1F:4234 $E0 $1A
     ld   a, $01                                   ;; 1F:4236 $3E $01
     ld   [wD3C8], a                               ;; 1F:4238 $EA $C8 $D3
-    ld   hl, wD320 + $0F                          ;; 1F:423B $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:423B $21 $2F $D3
     set  7, [hl]                                  ;; 1F:423E $CB $FE
-    ld   hl, wD330 + $0F                          ;; 1F:4240 $21 $3F $D3
+    ld   hl, wMusicChannel3.loopCounter           ;; 1F:4240 $21 $3F $D3
     set  7, [hl]                                  ;; 1F:4243 $CB $FE
     ld   hl, Data_01F_42EB                        ;; 1F:4245 $21 $EB $42
     call WriteChannel2AndDE                       ;; 1F:4248 $CD $7F $7A
@@ -105,9 +105,9 @@ ContinueJingleTreasureFound::
     jp   WriteChannel3AndDE                       ;; 1F:42B8 $C3 $85 $7A
 
 .jr_01F_42BB
-    ld   hl, wD320 + $0F                          ;; 1F:42BB $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:42BB $21 $2F $D3
     res  7, [hl]                                  ;; 1F:42BE $CB $BE
-    ld   hl, wD330 + $0F                          ;; 1F:42C0 $21 $3F $D3
+    ld   hl, wMusicChannel3.loopCounter           ;; 1F:42C0 $21 $3F $D3
     res  7, [hl]                                  ;; 1F:42C3 $CB $BE
     xor  a                                        ;; 1F:42C5 $AF
     ldh  [rNR30], a                               ;; 1F:42C6 $E0 $1A
@@ -585,7 +585,7 @@ BeginJingleUnknown10::
 BeginJingleOpenInventory::
     ld   a, $17                                   ;; 1F:45F3 $3E $17
     ld   [wD3BC], a                               ;; 1F:45F5 $EA $BC $D3
-    ld   hl, wD320 + $0F                          ;; 1F:45F8 $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:45F8 $21 $2F $D3
     set  7, [hl]                                  ;; 1F:45FB $CB $FE
     ld   hl, Data_01F_4632                        ;; 1F:45FD $21 $32 $46
     call func_01F_7AD0                            ;; 1F:4600 $CD $D0 $7A
@@ -624,7 +624,7 @@ Data_01F_4637::
     db   $00, $85, $0B, $00, $81, $12
 
 label_01F_463D:
-    ld   hl, wD320 + $0F                          ;; 1F:463D $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:463D $21 $2F $D3
     res  7, [hl]                                  ;; 1F:4640 $CB $BE
     ld   hl, Data_01F_431D                        ;; 1F:4642 $21 $1D $43
     call WriteChannel2AndDE                       ;; 1F:4645 $CD $7F $7A
@@ -637,7 +637,7 @@ BeginJingleCloseInventory::
 
     ld   a, $08                                   ;; 1F:4653 $3E $08
     ld   [wD3BC], a                               ;; 1F:4655 $EA $BC $D3
-    ld   hl, wD320 + $0F                          ;; 1F:4658 $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:4658 $21 $2F $D3
     set  7, [hl]                                  ;; 1F:465B $CB $FE
     ld   hl, Data_01F_4692                        ;; 1F:465D $21 $92 $46
     call func_01F_7AD0                            ;; 1F:4660 $CD $D0 $7A
@@ -1286,7 +1286,7 @@ Data_01F_4A64::
     db   $15, $38, $90, $34, $C6, $02, $15, $38, $D0, $30, $C6, $02
 
 BeginJingleDungeonOpened::
-    ld   hl, wD320 + $0F                          ;; 1F:4A70 $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:4A70 $21 $2F $D3
     set  7, [hl]                                  ;; 1F:4A73 $CB $FE
     ld   hl, Data_01F_4AAD                        ;; 1F:4A75 $21 $AD $4A
     jp   label_01F_5395                           ;; 1F:4A78 $C3 $95 $53
@@ -1308,7 +1308,7 @@ ContinueJingleDungeonOpened::
     jp   WriteChannel1AndDE                       ;; 1F:4A94 $C3 $79 $7A
 
 .jr_01F_4A97
-    ld   hl, wD320 + $0F                          ;; 1F:4A97 $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:4A97 $21 $2F $D3
     res  7, [hl]                                  ;; 1F:4A9A $CB $BE
     jp   label_01F_53B5                           ;; 1F:4A9C $C3 $B5 $53
 
@@ -2640,9 +2640,9 @@ label_01F_539A:
     ld   [wD390], a                               ;; 1F:53A1 $EA $90 $D3
     ld   [wD394], a                               ;; 1F:53A4 $EA $94 $D3
     ld   [wD3E2], a                               ;; 1F:53A7 $EA $E2 $D3
-    ld   a, [wD31F]                               ;; 1F:53AA $FA $1F $D3
+    ld   a, [wMusicChannel1.loopCounter]          ;; 1F:53AA $FA $1F $D3
     set  7, a                                     ;; 1F:53AD $CB $FF
-    ld   [wD31F], a                               ;; 1F:53AF $EA $1F $D3
+    ld   [wMusicChannel1.loopCounter], a          ;; 1F:53AF $EA $1F $D3
     jp   WriteChannel1AndDE                       ;; 1F:53B2 $C3 $79 $7A
 
 label_01F_53B5:
@@ -2658,9 +2658,9 @@ func_01F_53BB::
     ld   [wD3BC], a                               ;; 1F:53C7 $EA $BC $D3
     ld   [wD3A0], a                               ;; 1F:53CA $EA $A0 $D3
     ld   [wD3C6], a                               ;; 1F:53CD $EA $C6 $D3
-    ld   a, [wD31F]                               ;; 1F:53D0 $FA $1F $D3
+    ld   a, [wMusicChannel1.loopCounter]          ;; 1F:53D0 $FA $1F $D3
     res  7, a                                     ;; 1F:53D3 $CB $BF
-    ld   [wD31F], a                               ;; 1F:53D5 $EA $1F $D3
+    ld   [wMusicChannel1.loopCounter], a          ;; 1F:53D5 $EA $1F $D3
     ret                                           ;; 1F:53D8 $C9
 
 Data_01F_53D9::
@@ -3130,7 +3130,7 @@ func_01F_572C::
     jp   func_01F_635A                            ;; 1F:572F $C3 $5A $63
 
 func_01F_5732::
-    ld   hl, wD320 + $0F                          ;; 1F:5732 $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:5732 $21 $2F $D3
     set  7, [hl]                                  ;; 1F:5735 $CB $FE
     call func_01F_572C                            ;; 1F:5737 $CD $2C $57
     ld   hl, Data_01F_5790                        ;; 1F:573A $21 $90 $57
@@ -3159,7 +3159,7 @@ label_01F_5751:
 label_01F_575C:
     ld   hl, Data_01F_431D                        ;; 1F:575C $21 $1D $43
     call WriteChannel2AndDE                       ;; 1F:575F $CD $7F $7A
-    ld   hl, wD320 + $0F                          ;; 1F:5762 $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:5762 $21 $2F $D3
     res  7, [hl]                                  ;; 1F:5765 $CB $BE
     jp   label_01F_6327                           ;; 1F:5767 $C3 $27 $63
 
@@ -3245,7 +3245,7 @@ Data_01F_57F9::
     db   $80, $20, $79, $87, $48
 
 func_01F_57FE::
-    ld   hl, wD320 + $0F                          ;; 1F:57FE $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:57FE $21 $2F $D3
     set  7, [hl]                                  ;; 1F:5801 $CB $FE
     call func_01F_572C                            ;; 1F:5803 $CD $2C $57
     ld   hl, Data_01F_584B                        ;; 1F:5806 $21 $4B $58
@@ -4458,7 +4458,7 @@ func_01F_61A2::
     ld   [wD371], a                               ;; 1F:61AA $EA $71 $D3
     ld   a, $01                                   ;; 1F:61AD $3E $01
     ld   [wD3C8], a                               ;; 1F:61AF $EA $C8 $D3
-    ld   hl, wD320 + $0F                          ;; 1F:61B2 $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:61B2 $21 $2F $D3
     set  7, [hl]                                  ;; 1F:61B5 $CB $FE
     xor  a                                        ;; 1F:61B7 $AF
     ld   [wD392], a                               ;; 1F:61B8 $EA $92 $D3
@@ -4500,9 +4500,9 @@ jr_01F_61ED:
     ld   [wD396], a                               ;; 1F:61F1 $EA $96 $D3
     ld   [wD371], a                               ;; 1F:61F4 $EA $71 $D3
     ld   [wD3C8], a                               ;; 1F:61F7 $EA $C8 $D3
-    ld   hl, wD320 + $0F                          ;; 1F:61FA $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:61FA $21 $2F $D3
     res  7, [hl]                                  ;; 1F:61FD $CB $BE
-    ld   hl, wD320 + $0F                          ;; 1F:61FF $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:61FF $21 $2F $D3
     res  7, [hl]                                  ;; 1F:6202 $CB $BE
     ret                                           ;; 1F:6204 $C9
 
@@ -4654,7 +4654,7 @@ label_01F_62F8:
     ld   a, [wActiveWaveSfx]                      ;; 1F:62F8 $FA $70 $D3
     ld   [wD371], a                               ;; 1F:62FB $EA $71 $D3
     push hl                                       ;; 1F:62FE $E5
-    ld   hl, wD330 + $0F                          ;; 1F:62FF $21 $3F $D3
+    ld   hl, wMusicChannel3.loopCounter           ;; 1F:62FF $21 $3F $D3
     set  7, [hl]                                  ;; 1F:6302 $CB $FE
     pop  hl                                       ;; 1F:6304 $E1
     xor  a                                        ;; 1F:6305 $AF
@@ -4680,7 +4680,7 @@ label_01F_632D:
     ld   [wD371], a                               ;; 1F:6334 $EA $71 $D3
     ldh  [rNR30], a                               ;; 1F:6337 $E0 $1A
     ld   [wD3C8], a                               ;; 1F:6339 $EA $C8 $D3
-    ld   hl, wD330 + $0F                          ;; 1F:633C $21 $3F $D3
+    ld   hl, wMusicChannel3.loopCounter           ;; 1F:633C $21 $3F $D3
     res  7, [hl]                                  ;; 1F:633F $CB $BE
     ld   a, $01                                   ;; 1F:6341 $3E $01
     ld   [wD3E7], a                               ;; 1F:6343 $EA $E7 $D3
@@ -7907,7 +7907,7 @@ Data_01F_7717::
 func_01F_771C::
     xor  a                                        ;; 1F:771C $AF
     ld   [wD361], a                               ;; 1F:771D $EA $61 $D3
-    ld   hl, wD31F                                ;; 1F:7720 $21 $1F $D3
+    ld   hl, wMusicChannel1.loopCounter           ;; 1F:7720 $21 $1F $D3
     set  7, [hl]                                  ;; 1F:7723 $CB $FE
     ld   a, $01                                   ;; 1F:7725 $3E $01
     ld   [wD3C6], a                               ;; 1F:7727 $EA $C6 $D3
@@ -7938,7 +7938,7 @@ func_01F_7730::
     ld   [wD3C6], a                               ;; 1F:774F $EA $C6 $D3
 
 .jr_7752
-    ld   hl, wD31F                                ;; 1F:7752 $21 $1F $D3
+    ld   hl, wMusicChannel1.loopCounter           ;; 1F:7752 $21 $1F $D3
     res  7, [hl]                                  ;; 1F:7755 $CB $BE
     jp   func_01F_7A07                            ;; 1F:7757 $C3 $07 $7A
 
@@ -7958,7 +7958,7 @@ Data_01F_7769::
 func_01F_776E::
     xor  a                                        ;; 1F:776E $AF
     ld   [wD361], a                               ;; 1F:776F $EA $61 $D3
-    ld   hl, wD31F                                ;; 1F:7772 $21 $1F $D3
+    ld   hl, wMusicChannel1.loopCounter           ;; 1F:7772 $21 $1F $D3
     set  7, [hl]                                  ;; 1F:7775 $CB $FE
     ld   a, $01                                   ;; 1F:7777 $3E $01
     ld   [wD3C6], a                               ;; 1F:7779 $EA $C6 $D3
@@ -8008,7 +8008,7 @@ jr_01F_77B3:
 func_01F_77C0::
     xor  a                                        ;; 1F:77C0 $AF
     ld   [wD3C6], a                               ;; 1F:77C1 $EA $C6 $D3
-    ld   hl, wD31F                                ;; 1F:77C4 $21 $1F $D3
+    ld   hl, wMusicChannel1.loopCounter           ;; 1F:77C4 $21 $1F $D3
     res  7, [hl]                                  ;; 1F:77C7 $CB $BE
     ld   hl, Data_01F_53D9                        ;; 1F:77C9 $21 $D9 $53
     call WriteChannel1AndDE                       ;; 1F:77CC $CD $79 $7A
@@ -8402,7 +8402,7 @@ label_01F_7A2C:
 func_01F_7A33::
     ld   a, [wActiveNoiseSfx]                     ;; 1F:7A33 $FA $78 $D3
     ld   [wD379], a                               ;; 1F:7A36 $EA $79 $D3
-    ld   hl, wD320 + $0F                          ;; 1F:7A39 $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:7A39 $21 $2F $D3
     set  7, [hl]                                  ;; 1F:7A3C $CB $FE
     ld   a, $01                                   ;; 1F:7A3E $3E $01
     ld   [wD3C9], a                               ;; 1F:7A40 $EA $C9 $D3
@@ -8419,7 +8419,7 @@ label_01F_7A51:
     ld   [wD398], a                               ;; 1F:7A55 $EA $98 $D3
     ld   [wD379], a                               ;; 1F:7A58 $EA $79 $D3
     ld   [wD3C9], a                               ;; 1F:7A5B $EA $C9 $D3
-    ld   hl, wD320 + $0F                          ;; 1F:7A5E $21 $2F $D3
+    ld   hl, wMusicChannel2.loopCounter           ;; 1F:7A5E $21 $2F $D3
     res  7, [hl]                                  ;; 1F:7A61 $CB $BE
     ret                                           ;; 1F:7A63 $C9
 
@@ -8645,9 +8645,9 @@ func_01F_7B5C::
     ld   [wD361], a                               ;; 1F:7B6A $EA $61 $D3
     ld   [wD371], a                               ;; 1F:7B6D $EA $71 $D3
     ld   [wD379], a                               ;; 1F:7B70 $EA $79 $D3
-    ld   [wD31F], a                               ;; 1F:7B73 $EA $1F $D3
-    ld   [wD320 + $0F], a                         ;; 1F:7B76 $EA $2F $D3
-    ld   [wD330 + $0F], a                         ;; 1F:7B79 $EA $3F $D3
+    ld   [wMusicChannel1.loopCounter], a          ;; 1F:7B73 $EA $1F $D3
+    ld   [wMusicChannel2.loopCounter], a          ;; 1F:7B76 $EA $2F $D3
+    ld   [wMusicChannel3.loopCounter], a          ;; 1F:7B79 $EA $3F $D3
     ld   [wD34F], a                               ;; 1F:7B7C $EA $4F $D3
     ld   [wD39E], a                               ;; 1F:7B7F $EA $9E $D3
     ld   [wD39F], a                               ;; 1F:7B82 $EA $9F $D3

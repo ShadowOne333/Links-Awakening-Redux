@@ -12,7 +12,8 @@ PlayMusicTrack_1B::
     jp   PlayMusicTrack_1B_EntryPoint             ;; 1B:4006 $C3 $1E $40
 
 label_01B_4009:
-    ld   hl, wMusicTranspose                      ;; 1B:4009 $21 $00 $D3
+    assert LOW(wAudioSection) == 0, "Following code assumes audio memory is aligned to $100"
+    ld   hl, wAudioSection                        ;; 1B:4009 $21 $00 $D3
 
 .loop_400C
     ld   [hl], $00                                ;; 1B:400C $36 $00
@@ -361,9 +362,9 @@ label_01B_42AB:
     ldh  [rNR30], a                               ;; 1B:42B3 $E0 $1A
     ld   [wD3E7], a                               ;; 1B:42B5 $EA $E7 $D3
     push hl                                       ;; 1B:42B8 $E5
-    ld   a, [wD330 + 6]                           ;; 1B:42B9 $FA $36 $D3
+    ld   a, [wMusicChannel3.waveformPointerLow]   ;; 1B:42B9 $FA $36 $D3
     ld   l, a                                     ;; 1B:42BC $6F
-    ld   a, [wD330 + 7]                           ;; 1B:42BD $FA $37 $D3
+    ld   a, [wMusicChannel3.waveformPointerHigh]  ;; 1B:42BD $FA $37 $D3
     ld   h, a                                     ;; 1B:42C0 $67
     push bc                                       ;; 1B:42C1 $C5
     ld   c, $30                                   ;; 1B:42C2 $0E $30
@@ -528,30 +529,30 @@ LoadMusicData_1B::
     ld   [de], a                                  ;; 1B:4367 $12
     inc  e                                        ;; 1B:4368 $1C
     call Copy2Bytes_1B                            ;; 1B:4369 $CD $36 $43
-    ld   de, wD310                                ;; 1B:436C $11 $10 $D3
+    ld   de, wMusicChannel1                       ;; 1B:436C $11 $10 $D3
     call Copy2Bytes_1B                            ;; 1B:436F $CD $36 $43
-    ld   de, wD320                                ;; 1B:4372 $11 $20 $D3
+    ld   de, wMusicChannel2                       ;; 1B:4372 $11 $20 $D3
     call Copy2Bytes_1B                            ;; 1B:4375 $CD $36 $43
-    ld   de, wD330                                ;; 1B:4378 $11 $30 $D3
+    ld   de, wMusicChannel3                       ;; 1B:4378 $11 $30 $D3
     call Copy2Bytes_1B                            ;; 1B:437B $CD $36 $43
-    ld   de, wD340                                ;; 1B:437E $11 $40 $D3
+    ld   de, wMusicChannel4                       ;; 1B:437E $11 $40 $D3
     call Copy2Bytes_1B                            ;; 1B:4381 $CD $36 $43
-    ld   hl, wD310                                ;; 1B:4384 $21 $10 $D3
-    ld   de, wD314                                ;; 1B:4387 $11 $14 $D3
+    ld   hl, wMusicChannel1                       ;; 1B:4384 $21 $10 $D3
+    ld   de, wMusicChannel1.definitionPointerLow  ;; 1B:4387 $11 $14 $D3
     call LoadSoundDefinitionData                  ;; 1B:438A $CD $2B $43
-    ld   hl, wD320                                ;; 1B:438D $21 $20 $D3
-    ld   de, wD320 + 4                            ;; 1B:4390 $11 $24 $D3
+    ld   hl, wMusicChannel2                       ;; 1B:438D $21 $20 $D3
+    ld   de, wMusicChannel2.definitionPointerLow  ;; 1B:4390 $11 $24 $D3
     call LoadSoundDefinitionData                  ;; 1B:4393 $CD $2B $43
-    ld   hl, wD330                                ;; 1B:4396 $21 $30 $D3
-    ld   de, wD330 + 4                            ;; 1B:4399 $11 $34 $D3
+    ld   hl, wMusicChannel3                       ;; 1B:4396 $21 $30 $D3
+    ld   de, wMusicChannel3.definitionPointerLow  ;; 1B:4399 $11 $34 $D3
     call LoadSoundDefinitionData                  ;; 1B:439C $CD $2B $43
-    ld   hl, wD340                                ;; 1B:439F $21 $40 $D3
-    ld   de, wD344                                ;; 1B:43A2 $11 $44 $D3
+    ld   hl, wMusicChannel4                       ;; 1B:439F $21 $40 $D3
+    ld   de, wMusicChannel4.definitionPointerLow  ;; 1B:43A2 $11 $44 $D3
     call LoadSoundDefinitionData                  ;; 1B:43A5 $CD $2B $43
 
     ; [D3x2] = 1 for all channels
     ld   bc, $0410                                ;; 1B:43A8 $01 $10 $04
-    ld   hl, wD312                                ;; 1B:43AB $21 $12 $D3
+    ld   hl, wMusicChannel1.lengthCountdown       ;; 1B:43AB $21 $12 $D3
 .loop
     ld   [hl], $01                                ;; 1B:43AE $36 $01
     ld   a, c                                     ;; 1B:43B0 $79
@@ -561,9 +562,9 @@ LoadMusicData_1B::
     jr   nz, .loop                                ;; 1B:43B4 $20 $F8
 
     xor  a                                        ;; 1B:43B6 $AF
-    ld   [wD31E], a                               ;; 1B:43B7 $EA $1E $D3
-    ld   [wD320 + $0E], a                         ;; 1B:43BA $EA $2E $D3
-    ld   [wD330 + $0E], a                         ;; 1B:43BD $EA $3E $D3
+    ld   [wMusicChannel1.lengthCounterUp], a      ;; 1B:43B7 $EA $1E $D3
+    ld   [wMusicChannel2.lengthCounterUp], a      ;; 1B:43BA $EA $2E $D3
+    ld   [wMusicChannel3.lengthCounterUp], a      ;; 1B:43BD $EA $3E $D3
     ret                                           ;; 1B:43C0 $C9
 
 ; Input:
@@ -571,9 +572,9 @@ LoadMusicData_1B::
 soundOpcode9DChannel3Handler_1B::
     push hl                                       ;; 1B:43C1 $E5
     ld   a, e                                     ;; 1B:43C2 $7B
-    ld   [wD330 + 6], a                           ;; 1B:43C3 $EA $36 $D3
+    ld   [wMusicChannel3.waveformPointerLow], a   ;; 1B:43C3 $EA $36 $D3
     ld   a, d                                     ;; 1B:43C6 $7A
-    ld   [wD330 + 7], a                           ;; 1B:43C7 $EA $37 $D3
+    ld   [wMusicChannel3.waveformPointerHigh], a  ;; 1B:43C7 $EA $37 $D3
     ld   a, [wD371]                               ;; 1B:43CA $FA $71 $D3
     and  a                                        ;; 1B:43CD $A7
     jr   nz, .nextOpcode                          ;; 1B:43CE $20 $08
@@ -671,7 +672,7 @@ label_01B_442A:
     cp   $03                                      ;; 1B:442D $FE $03
     jr   nz, .channel3Done                        ;; 1B:442F $20 $10
 
-    ld   a, [wD330 + 8]                           ;; 1B:4431 $FA $38 $D3
+    ld   a, [wMusicChannel3.volumeEffect]         ;; 1B:4431 $FA $38 $D3
     bit  7, a                                     ;; 1B:4434 $CB $7F
     jr   z, .channel3Done                         ;; 1B:4436 $28 $09
 
@@ -857,7 +858,7 @@ UpdateAllMusicChannels_1B::
     call func_01B_4303                            ;; 1B:451A $CD $03 $43
     ld   a, $01                                   ;; 1B:451D $3E $01
     ld   [wActiveChannelIndex], a                 ;; 1B:451F $EA $50 $D3
-    ld   hl, wD310                                ;; 1B:4522 $21 $10 $D3
+    ld   hl, wMusicChannel1                       ;; 1B:4522 $21 $10 $D3
 
 ; This will loop through all music channels and update them.
 ; Input:
@@ -1116,7 +1117,7 @@ HandleNote::
     jr   nz, .jr_01B_4656                         ;; 1B:465C $20 $F8
 
     ld   c, rNR41 & $ff                           ;; 1B:465E $0E $20
-    ld   hl, wD344                                ;; 1B:4660 $21 $44 $D3
+    ld   hl, wMusicChannel4.definitionPointerLow  ;; 1B:4660 $21 $44 $D3
     ld   b, $00                                   ;; 1B:4663 $06 $00
     jr   .jr_01B_46A8                             ;; 1B:4665 $18 $41
 
@@ -1143,7 +1144,7 @@ HandleNote::
 
     ; Channel 3
     ld   c, rNR30 & $ff                           ;; 1B:4688 $0E $1A
-    ld   a, [wD330 + $0F]                         ;; 1B:468A $FA $3F $D3
+    ld   a, [wMusicChannel3.loopCounter]          ;; 1B:468A $FA $3F $D3
     bit  7, a                                     ;; 1B:468D $CB $7F
     jr   nz, .jr_01B_4696                         ;; 1B:468F $20 $05
 
@@ -1248,11 +1249,11 @@ UpdateNextMusicChannel_1B::
 
 .lastChannel
     ; This was the last channel. Done updating sound for now.
-    ld   hl, wD31E                                ;; 1B:46EF $21 $1E $D3
+    ld   hl, wMusicChannel1.lengthCounterUp       ;; 1B:46EF $21 $1E $D3
     inc  [hl]                                     ;; 1B:46F2 $34
-    ld   hl, wD320 + $0E                          ;; 1B:46F3 $21 $2E $D3
+    ld   hl, wMusicChannel2.lengthCounterUp       ;; 1B:46F3 $21 $2E $D3
     inc  [hl]                                     ;; 1B:46F6 $34
-    ld   hl, wD330 + $0E                          ;; 1B:46F7 $21 $3E $D3
+    ld   hl, wMusicChannel3.lengthCounterUp       ;; 1B:46F7 $21 $3E $D3
     inc  [hl]                                     ;; 1B:46FA $34
     ret                                           ;; 1B:46FB $C9
 
@@ -1348,51 +1349,51 @@ jr_01B_4762:
     jp   label_01B_4720                           ;; 1B:4784 $C3 $20 $47
 
 func_01B_4787::
-    ld   a, [wD31B]                               ;; 1B:4787 $FA $1B $D3
+    ld   a, [wMusicChannel1.playingRest]          ;; 1B:4787 $FA $1B $D3
     and  a                                        ;; 1B:478A $A7
     jr   nz, .jr_47AE                             ;; 1B:478B $20 $21
 
-    ld   a, [wD317]                               ;; 1B:478D $FA $17 $D3
+    ld   a, [wMusicChannel1.softwareEnvelope]     ;; 1B:478D $FA $17 $D3
     and  a                                        ;; 1B:4790 $A7
     jr   z, .jr_47AE                              ;; 1B:4791 $28 $1B
 
     and  $0F                                      ;; 1B:4793 $E6 $0F
     ld   b, a                                     ;; 1B:4795 $47
     ld   hl, wD307                                ;; 1B:4796 $21 $07 $D3
-    ld   a, [wD31E]                               ;; 1B:4799 $FA $1E $D3
+    ld   a, [wMusicChannel1.lengthCounterUp]      ;; 1B:4799 $FA $1E $D3
     cp   [hl]                                     ;; 1B:479C $BE
     jr   nz, .jr_47AE                             ;; 1B:479D $20 $0F
 
     ld   c, $12                                   ;; 1B:479F $0E $12
-    ld   de, wD31A                                ;; 1B:47A1 $11 $1A $D3
-    ld   a, [wD31F]                               ;; 1B:47A4 $FA $1F $D3
+    ld   de, wMusicChannel1.noteBaseFrequencyHigh ;; 1B:47A1 $11 $1A $D3
+    ld   a, [wMusicChannel1.loopCounter]          ;; 1B:47A4 $FA $1F $D3
     bit  7, a                                     ;; 1B:47A7 $CB $7F
     jr   nz, .jr_47AE                             ;; 1B:47A9 $20 $03
 
     call func_01B_47D2                            ;; 1B:47AB $CD $D2 $47
 
 .jr_47AE
-    ld   a, [wD320 + $0B]                         ;; 1B:47AE $FA $2B $D3
+    ld   a, [wMusicChannel2.playingRest]          ;; 1B:47AE $FA $2B $D3
     and  a                                        ;; 1B:47B1 $A7
     ret  nz                                       ;; 1B:47B2 $C0
 
-    ld   a, [wD320 + $07]                         ;; 1B:47B3 $FA $27 $D3
+    ld   a, [wMusicChannel2.softwareEnvelope]     ;; 1B:47B3 $FA $27 $D3
     and  a                                        ;; 1B:47B6 $A7
     ret  z                                        ;; 1B:47B7 $C8
 
     and  $0F                                      ;; 1B:47B8 $E6 $0F
     ld   b, a                                     ;; 1B:47BA $47
     ld   hl, wD308                                ;; 1B:47BB $21 $08 $D3
-    ld   a, [wD320 + $0E]                         ;; 1B:47BE $FA $2E $D3
+    ld   a, [wMusicChannel2.lengthCounterUp]      ;; 1B:47BE $FA $2E $D3
     cp   [hl]                                     ;; 1B:47C1 $BE
     ret  nz                                       ;; 1B:47C2 $C0
 
-    ld   a, [wD320 + $0F]                         ;; 1B:47C3 $FA $2F $D3
+    ld   a, [wMusicChannel2.loopCounter]          ;; 1B:47C3 $FA $2F $D3
     bit  7, a                                     ;; 1B:47C6 $CB $7F
     ret  nz                                       ;; 1B:47C8 $C0
 
     ld   c, $17                                   ;; 1B:47C9 $0E $17
-    ld   de, wD320 + $0A                          ;; 1B:47CB $11 $2A $D3
+    ld   de, wMusicChannel2.noteBaseFrequencyHigh ;; 1B:47CB $11 $2A $D3
     call func_01B_47D2                            ;; 1B:47CE $CD $D2 $47
     ret                                           ;; 1B:47D1 $C9
 
@@ -1786,9 +1787,9 @@ StopSquareAndWaveChannels_1B::
     xor  a                                        ;; 1B:4E57 $AF
     ld   [wD361], a                               ;; 1B:4E58 $EA $61 $D3
     ld   [wD371], a                               ;; 1B:4E5B $EA $71 $D3
-    ld   [wD31F], a                               ;; 1B:4E5E $EA $1F $D3
-    ld   [wD320 + $0F], a                         ;; 1B:4E61 $EA $2F $D3
-    ld   [wD330 + $0F], a                         ;; 1B:4E64 $EA $3F $D3
+    ld   [wMusicChannel1.loopCounter], a          ;; 1B:4E5E $EA $1F $D3
+    ld   [wMusicChannel2.loopCounter], a          ;; 1B:4E61 $EA $2F $D3
+    ld   [wMusicChannel3.loopCounter], a          ;; 1B:4E64 $EA $3F $D3
     ld   [wD39E], a                               ;; 1B:4E67 $EA $9E $D3
     ld   [wD39F], a                               ;; 1B:4E6A $EA $9F $D3
     ld   [wActiveMusicTableIndex], a              ;; 1B:4E6D $EA $D9 $D3

@@ -268,7 +268,7 @@ jr_014_4AE7:
     ld   d, b                                     ;; 14:4B10 $50
     ; Start 3 bytes before the conversion table,
     ; to account for wMaxHearts starting at 3.
-    ld   hl, HeartsToHealthTable - 3                   ;; 14:4B11 $21 $AD $4A
+    ld   hl, HeartsToHealthTable - 3              ;; 14:4B11 $21 $AD $4A
     add  hl, de                                   ;; 14:4B14 $19
     ld   a, [wHealth]                             ;; 14:4B15 $FA $5A $DB
     cp   [hl]                                     ;; 14:4B18 $BE

@@ -34,7 +34,7 @@ ZombieEntityHandler::
     ld   hl, wEntitiesPosYTable                   ;; 18:63B4 $21 $10 $C2
     add  hl, bc                                   ;; 18:63B7 $09
     ld   [hl], a                                  ;; 18:63B8 $77
-    call GetObjectUnderEntity                            ;; 18:63B9 $CD $93 $64
+    call GetObjectUnderEntity                     ;; 18:63B9 $CD $93 $64
     ldh  a, [hMultiPurpose3]                      ;; 18:63BC $F0 $DA
     cp   $00                                      ;; 18:63BE $FE $00
     jr   z, .jr_63C9                              ;; 18:63C0 $28 $07

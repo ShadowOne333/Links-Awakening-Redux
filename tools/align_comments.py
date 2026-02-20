@@ -12,7 +12,7 @@ def main():
     for path, paths, files in os.walk(os.path.join(basepath, "..", "src")):
         for file in files:
             if file.endswith(".asm"):
-                content = open(os.path.join(path, file), "rt").read().split("\n")
+                content = open(os.path.join(path, file), "rt", encoding="utf-8").read().split("\n")
                 new_content = []
                 for line in content:
                     m = regex.search(line)
@@ -25,7 +25,7 @@ def main():
                                 code += " " * (49 - len(code))
                                 line = code + " " + comment
                     new_content.append(line)
-                open(os.path.join(path, file), "wt").write("\n".join(new_content))
+                open(os.path.join(path, file), "wt", encoding="utf-8").write("\n".join(new_content))
 
 if __name__ == "__main__":
     main()

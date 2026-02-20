@@ -7259,7 +7259,7 @@ LoadObject_RevolvingDoor::
     push bc                                       ;; 00:376D $C5
     call ObjectPositionToRoomObjectAddress        ;; 00:376E $CD $EE $35
     ld   bc, HorizontalObjectOffsets              ;; 00:3771 $01 $E1 $37
-    ld   de, RevolvingDoorObjectIds                    ;; 00:3774 $11 $6B $37
+    ld   de, RevolvingDoorObjectIds               ;; 00:3774 $11 $6B $37
     jp   CopyIndoorsMacroObjectsToRoom            ;; 00:3777 $C3 $4B $35
 
 OneWayArrowObjectIds::

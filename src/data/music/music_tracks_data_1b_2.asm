@@ -771,20 +771,21 @@ MusicMabeVillage::
     dw   MusicMabeVillage_Channel3_rest_1C0
     dw   $0000
 
-MusicMabeVillage_Channel1:: ; accompaniment
+MusicMabeVillage_Channel1:: ; Accompaniment
     dw   ChannelDefinition_1b_5343
     dw   $ffff, MusicMabeVillage_Channel1
 
-MusicMabeVillage_Channel2:: ; melody
+MusicMabeVillage_Channel2:: ; Melody
     dw   ChannelDefinition_1b_53a5
     dw   $ffff, MusicMabeVillage_Channel2
 
-ChannelDefinition_1b_5343:: ; accompaniment
+ChannelDefinition_1b_5343:: ; Accompaniment
     set_envelope_duty $52, $00, 2, 0
     enable_software_envelope
 
+    ; 16 beats
     begin_loop $02
-        notelen 2
+        notelen 2; 2 beats
         note G_3
         note D_4
     next_loop
@@ -794,6 +795,7 @@ ChannelDefinition_1b_5343:: ; accompaniment
         note E_4
     next_loop
 
+    ; 16 beats
     begin_loop $02
         note G_3
         note F#4
@@ -804,6 +806,7 @@ ChannelDefinition_1b_5343:: ; accompaniment
         note E_4
     next_loop
 
+    ; 16 beats
     begin_loop $02
         note G_3
         note D_4
@@ -814,6 +817,7 @@ ChannelDefinition_1b_5343:: ; accompaniment
         note D#4
     next_loop
 
+    ; 16 beats
     begin_loop $02
         note A_3
         note E_4
@@ -824,6 +828,7 @@ ChannelDefinition_1b_5343:: ; accompaniment
     note E_3
     note D_3
 
+    ; 16 beats
     begin_loop $02
         note C_3
         note G_3
@@ -834,6 +839,7 @@ ChannelDefinition_1b_5343:: ; accompaniment
         note A_3
     next_loop
 
+    ; 16 beats
     begin_loop $02
         note B_2
         note A_3
@@ -844,6 +850,7 @@ ChannelDefinition_1b_5343:: ; accompaniment
         note B_3
     next_loop
 
+    ; 16 beats
     begin_loop $02
         note A_2
         note E_3
@@ -853,106 +860,142 @@ ChannelDefinition_1b_5343:: ; accompaniment
     note D#3
     note D_3
     note C_3
+
+    ; 16 beats
     set_envelope_duty $40, $00, 2, 0
-    notelen 4
+    notelen 4; 8 beats
     note D_3
     note C_3
+
+    ; 16 long beats. Because we've swapped MusicSpeedData, 1 beat is 10 frames instead of 9 frames.
     set_speed MusicSpeedData_1b_4b04
-    notelen 4
+    notelen 4; 8 long beats
     note B_2
-    notelen 7
+    notelen 7; 6 long beats
     note A_2
     set_envelope_duty $52, $00, 2, 0
-    notelen 2
+    notelen 2; 2 long beats
     note D_3
     set_speed MusicSpeedData_1b_4af5
     end_def
 
-ChannelDefinition_1b_53a5:: ; melody
+; Case study! This song uses MusicSpeedData_1b_4af5, stored in
+; music_tracks_data_1b_1.asm.
+;
+; `notelen *` is an index into that table. It gets note durations in frames.
+; The Mabe Village theme uses notelens 1, 2, 3, 4, and 7, which yield frame
+; durations 9, 18, 36, 72, and 54.
+;
+; To make it easier to think about, we can convert those frame values to
+; musical "beats" by dividing by their greatest common factor. In this case,
+; that's 9 frames per 1 beat.
+;
+;     MusicSpeedData_1b_4af5::
+;     ; notelen:      1    2    3    4              7
+;         db   $04, $09, $12, $24, $48, $90, $1b, $36, $6c, $05, $0c, $18, $18, $06, $d8
+;     ; Decimal:      9   18   36   72             54
+;     ; Beats:        1    2    4    8              6
+
+ChannelDefinition_1b_53a5:: ; Melody
     set_envelope_duty $56, $00, 2, 0
-    notelen 3
+
+    ; 16 beats
+    notelen 3; 4 beats
     note D_5
     note G_4
-    notelen 7
+    notelen 7; 6 beats
     note A_4
-    notelen 1
+    notelen 1; 1 beat
     note B_4
     note C_5
-    notelen 2
+
+    ; 16 beats
+    notelen 2; 2 beats
     note D_5
     note D_5
     note G_4
     note G_4
-    notelen 7
+    notelen 7; 6 beats
     note A_4
-    notelen 1
+    notelen 1; 1 beat
     note B_4
     note C_5
-    notelen 2
+
+    ; 16 beats
+    notelen 2; 2 beats
     note B_4
     note D_5
-    notelen 7
+    notelen 7; 6 beats
     note A_5
-    notelen 2
+    notelen 2; 2 beats
     note G_5
     note A_5
     note G_5
+
+    ; 16 beats
     note D_5
-    notelen 1
+    notelen 1; 1 beat
     note C_5
     note B_4
-    notelen 3
+    notelen 3; 4 beats
     note A_4
     set_envelope_duty $42, $00, 2, 0
-    note F#4
+    note F#4 ; Using the melody channel for accompaniment, for this one note
     set_envelope_duty $56, $00, 2, 0
-    notelen 1
+    notelen 1; 1 beat
     rest
     note B_4
     note C_5
     note D_5
-    notelen 3
+
+    ; 16 beats
+    notelen 3; 4 beats
     note E_5
     note G_4
-    notelen 7
+    notelen 7; 6 beats
     note F#4
-    notelen 1
+    notelen 1; 1 beat
     note A_4
     note E_5
-    notelen 2
+
+    ; 16 beats
+    notelen 2; 2 beats
     note D_5
     note D_5
     note F#4
     note F#4
-    notelen 7
+    notelen 7; 6 beats
     note G_4
-    notelen 1
+    notelen 1; 1 beat
     note G_4
     note F#4
-    notelen 2
+
+    ; 16 beats
+    notelen 2; 2 beats
     note E_4
     note G_4
-    notelen 7
+    notelen 7; 6 beats
     note B_4
-    notelen 2
+    notelen 2; 2 beats
     note A_4
     note G_4
     note D#4
 
+    ; 16 beats
     begin_loop $04
         note D_4
         note D_5
     next_loop
 
+    ; 16 long beats. Because we've swapped MusicSpeedData, 1 beat is 10 frames instead of 9.
     set_speed MusicSpeedData_1b_4b04
-
     begin_loop $04
-        notelen 2
+        notelen 2; 2 long beats
         note D_5
         note D_6
     next_loop
-
     set_speed MusicSpeedData_1b_4af5
+
     end_def
 
 MusicOverworld::

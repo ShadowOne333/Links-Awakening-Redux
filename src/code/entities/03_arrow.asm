@@ -219,7 +219,7 @@ ArrowRockAfterHittingWall:
 IF __OPTIMIZATIONS_3__
     jp   z, UnloadEntityAndReturn
 ELSE
-    jr   nz, .unloadEnd                             ;; 03:6B4E $20 $03
+    jr   nz, .unloadEnd                           ;; 03:6B4E $20 $03
     jp   UnloadEntityAndReturn                    ;; 03:6B50 $C3 $8D $3F
 ENDC
 

@@ -5325,7 +5325,7 @@ ApplyLinkCollisionWithEnemy::
 
 .jr_6D73
     ld   a, [wInvincibilityCounter]               ;; 03:6D73 $FA $C7 $DB
-    ld   hl, wIsLinkImmuneToCollisionDamage                                ;; 03:6D76 $21 $C6 $C1
+    ld   hl, wIsLinkImmuneToCollisionDamage       ;; 03:6D76 $21 $C6 $C1
     or   [hl]                                     ;; 03:6D79 $B6
     ld   hl, wLinkPlayingOcarinaCountdown         ;; 03:6D7A $21 $66 $C1
     or   [hl]                                     ;; 03:6D7D $B6

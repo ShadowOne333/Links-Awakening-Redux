@@ -1400,7 +1400,7 @@ ResetRoomVariables::
     ld   [wMapEntrancePositionZ], a               ;; 20:4CAC $EA $C8 $DB
     ld   [wTorchesCount], a                       ;; 20:4CAF $EA $C9 $DB
     ld   [wC1A2], a                               ;; 20:4CB2 $EA $A2 $C1
-    ld   [wIsLinkImmuneToCollisionDamage], a                               ;; 20:4CB5 $EA $C6 $C1
+    ld   [wIsLinkImmuneToCollisionDamage], a      ;; 20:4CB5 $EA $C6 $C1
     ld   [wRoomSwitchableObject], a               ;; 20:4CB8 $EA $FA $D6
     ld   [wBlockItemUsage], a                     ;; 20:4CBB $EA $0A $C5
     ldh  [hStaircase], a                          ;; 20:4CBE $E0 $AC
