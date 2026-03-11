@@ -1139,9 +1139,7 @@ Data_004_4836::
     db   $00, $01, $02, $03, $04, $05, $04, $05, $06 ;; 04:4836
 
 GenieState2Handler::
-    db   $CD                                      ;; 04:483F
-    cp   b                                        ;; 04:4840 $B8
-    ld   c, b                                     ;; 04:4841 $48
+    call func_004_48B8                            ;; 04:483F $CD $B8 $48
     call ReturnIfNonInteractive_04                ;; 04:4842 $CD $A3 $7F
     call GetEntityTransitionCountdown             ;; 04:4845 $CD $05 $0C
     bit  7, a                                     ;; 04:4848 $CB $7F
@@ -1219,6 +1217,7 @@ jr_004_48A6:
     ld   a, [hl]                                  ;; 04:48B4 $7E
     jp   SetEntitySpriteVariant                   ;; 04:48B5 $C3 $0C $3B
 
+func_004_48B8:
     ldh  a, [hActiveEntitySpriteVariant]          ;; 04:48B8 $F0 $F1
     rla                                           ;; 04:48BA $17
     rla                                           ;; 04:48BB $17

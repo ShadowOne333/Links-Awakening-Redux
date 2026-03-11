@@ -1,24 +1,47 @@
+; The `notelen` macro indexes into MusicSpeedData_* tables, which give a note
+; length in frames.
+
+; Boss, FinalBoss, EagleBossTransition, InstrumentSurfHarp
 MusicSpeedData_1e_4a9d::
     db   $01, $03, $06, $0c, $18, $30, $09, $12, $24, $02, $04, $08, $01, $01, $48
 
+; FinalBoss, ObtainInstrument, OverworldSwordless, DreamShrineDream,
+; FinalBossDefeat
 MusicSpeedData_1e_4aac::
     db   $02, $04, $08, $10, $20, $40, $0c, $18, $30, $02, $05, $03, $01, $01, $60
 
+; Miniboss, EagleBossLoop, EagleBossTransition, TailCave, BottleGrotto,
+; AnglersTunnel, DreamShrineSleep, SouthernShrine, Owl, InstrumentWindMarimba,
+; Henhouse
 MusicSpeedData_1e_4abb::
     db   $03, $05, $0a, $14, $28, $50, $0f, $1e, $3c, $02, $08, $10, $02, $01, $78
 
+; TurtleRock, IntroWakeUp, DreamShrineBed, DreamShrineDream, Cave,
+; MarinUnused, TitleCutscene, DreamShrineSleep, InstrumentCoralTriangle,
+; RoosterRevival, WindFish, BossDefeat
 MusicSpeedData_1e_4aca::
     db   $03, $06, $0c, $18, $30, $60, $12, $24, $48, $03, $08, $10, $02, $04, $90
 
+; FileSelect, KeyCavern, AfterBoss, CatfishsMaw, EaglesTower,
+; OpenAnglersTunnel, MarinBeachTalk, TitleCutscene, FinalBoss,
+; EggBalladDefault, EggBalladBell, EggBalladHarp, EggBalladMarimba,
+; EggBalladTriangle, EggBalladOrgan, EggBalladAll, InstrumentSeaLilysBell,
+; InstrumentThunderDrum, MarinSing, LearnBallad, GhostHouse, FileSelectZelda,
+; HeartContainer
 MusicSpeedData_1e_4ad9::
     db   $03, $07, $0e, $1c, $38, $70, $15, $2a, $54, $04, $09, $12, $02, $01, $a8
 
+; TitleCutscene, FinalBossIntro, KanaletCastle, FaceShrine, 2dUnderground,
+; MarinOnBeach, MarinBeachTalk, InstrumentFullMoonCello,
+; InstrumentOrganOfEveningCalm, HeartContainer
 MusicSpeedData_1e_4ae8::
     db   $04, $08, $10, $20, $40, $80, $18, $30, $60, $04, $02, $01, $01, $00, $c0
 
+; EggMaze, InstrumentConchHorn, L2Sword
 MusicSpeedData_1e_4af7::
     db   $04, $09, $12, $24, $48, $90, $1b, $36, $6c, $05, $0c, $18, $18, $06, $d8
 
+; ManbosMambo
 MusicSpeedData_1e_4b06::
     db   $05, $0a, $14, $28, $50, $a0, $1e, $3c, $78, $05, $01, $01, $01, $01, $f0
 

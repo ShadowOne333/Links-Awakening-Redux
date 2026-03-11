@@ -797,8 +797,9 @@ wDialogGotItem::
 wDialogGotItemCountdown::
   ds 1 ; C1AA
 
-; Unlabeled
-wC1AB::
+; When this value is non-zero the player cannot interact with dialog boxes (press button to advance/close)
+; This is only used by the heart piece dialog interaction in the base game.
+wDialogInteractionLocked::
   ds 1 ; C1AB
 
 ; Unlabeled
@@ -967,7 +968,7 @@ wC1CF::
 
 ; Unlabeled
 wC1D0::
-  ds 16 ; C1D0 -C1DF
+  ds 16 ; C1D0 - C1DF
 
 ; Unlabeled
 wC1E0::
@@ -1512,8 +1513,9 @@ wEggMazeProgress::
 wDialogSFX::
     ds 1 ; C5AB
 
-; Unlabeled
-wC5AC::
+; Seems to be a counter for timing NOISE_SFX_BOOMERANG
+; Values: $00-$1A
+wBoomerangSFXCounter::
   ds 1 ; C5AC
 
 ; Unlabeled
@@ -2324,13 +2326,16 @@ wD229::
 ; Audio section
 ;
 
-wAudioSection::
+section "WRAM Audio section", wramx[$D300], bank[1] ; from D300 to D3FF
+wAudioSection:: ; The audio section is from D300 to D3FF
 
 ; Note transpose value applied to all channels. Should be multiple of 2.
+;  This value is signed, so it can shift upwards or downwards.
 wMusicTranspose::
   ds 1 ; D300
 
-; Points to some data which somehow sets the music's speed
+; Points to a table of 16 bytes. The "notelen" (A0-AF) music instruction indexes this table
+;   to get the amount of frames to delay between playing notes.
 wMusicSpeedPointer::
   ds 2 ; D301 - D302
 
@@ -2348,78 +2353,184 @@ wD308::
   ds 8 ; D308 - D30F
 
 ; Channel 1 data pointer
-wD310::
-  ds 2 ; D310 - D311
+wMusicChannel1:
+  ; The channel pointer points to the list of channel definitions which defines the overal structure of the song.
+.channelPointerLow:
+  ds 1 ; D310
+.channelPointerHigh:
+  ds 1 ; D311
 
-; Unlabeled
-; Copied from D313. A counter?
-wD312::
+.lengthCountdown:: ; Counts down from the speed value retrieved from the speed table, when reaches zero the next note is played.
   ds 1 ; D312
 
-; Unlabeled
-wD313::
+.noteLength:: ; The length of the playing note in frames, retrieved from the speedtable and notelen selection.
   ds 1 ; D313
 
-; Unlabeled
-; Channel 1 definition data pointer
-wD314::
-  ds 2 ; D314 - D315
+; Channel 1 definition data pointer, points to actual music instructions.
+.definitionPointerLow::
+  ds 1 ; D314
+.definitionPointerHigh::
+  ds 1 ; D315
 
-; Unlabeled
-; Opcode 9D stores data here.
-; For channel 3, D336-D337 are a pointer to waveform data.
-wD316::
+; Opcode 9D stores data here, this data is copied to NR12. Contains initial volume and volume envelope.
+.volumeEnvelope::
   ds 1 ; D316
 
-; Unlabeled
-; Points to frequency data for NRx3 and NRx4
-wD317::
-  ds 3 ; D317 - D319
+; Opcode 9D stores data here for a software envelope.
+; Lower nibble is an index into the table at 1B:4B13 (-1)
+; Bit7 and Bit6 control the speed? (proper investigation is needed)
+.softwareEnvelope::
+  ds 1 ; D317
+; Opcode 9D stores data here. Controls the duty and length? (or vibrato?)
+.dutyLength::
+  ds 1 ; D318
 
-; Unlabeled
-wD31A::
+; Points to frequency data for NRx3 and NRx4
+.noteBaseFrequencyLow::
+  ds 1 ; D319
+.noteBaseFrequencyHigh::
   ds 1 ; D31A
 
-; Unlabeled
-wD31B::
+.playingRest::
   ds 1 ; D31B
 
-; Unlabeled
-; Loop pointer for sound definition data?
-wD31C::
+; Loop pointer for sound definition data
+.loopPointer::
   ds 2 ; D31C - D31D
 
-; Unlabeled
-; Incremented each frame?
-wD31E::
+; Counts up from zero to .noteLength, inverse of .lengthCountdown
+.lengthCounterUp::
   ds 1 ; D31E
 
-; Unlabeled
-; Audio loop counter; a segment loops [wD31F] times, then continues on.
-wD31F::
+; Audio loop counter; a segment loops [.loopCounter] times, then continues on.
+; Bit7 is set if this channel is used for sound effects.
+.loopCounter::
   ds 1 ; D31F
 
-; Unlabeled
-; Channel 2 data (similar to D310)
-wD320::
-  ds $10 ; D320 - D32F
+; Channel 2 data pointer
+wMusicChannel2:
+  ; The channel pointer points to the list of channel definitions which defines the overal structure of the song.
+.channelPointerLow:
+  ds 1 ; D320
+.channelPointerHigh:
+  ds 1 ; D321
+
+.lengthCountdown:: ; Counts down from the speed value retrieved from the speed table, when reaches zero the next note is played.
+  ds 1 ; D322
+
+.noteLength:: ; The length of the playing note in frames, retrieved from the speedtable and notelen selection.
+  ds 1 ; D323
+
+; Channel 1 definition data pointer, points to actual music instructions.
+.definitionPointerLow::
+  ds 1 ; D324
+.definitionPointerHigh::
+  ds 1 ; D325
+
+; Opcode 9D stores data here, this data is copied to NR12. Contains initial volume and volume envelope.
+.volumeEnvelope::
+  ds 1 ; D326
+
+; Opcode 9D stores data here for a software envelope.
+; Lower nibble is an index into the table at 1B:4B13 (-1)
+; Bit7 and Bit6 control the speed? (proper investigation is needed)
+.softwareEnvelope::
+  ds 1 ; D327
+; Opcode 9D stores data here. Controls the duty and length? (or vibrato?)
+.dutyLength::
+  ds 1 ; D328
+
+; Points to frequency data for NRx3 and NRx4
+.noteBaseFrequencyLow::
+  ds 1 ; D329
+.noteBaseFrequencyHigh::
+  ds 1 ; D32A
+
+.playingRest::
+  ds 1 ; D32B
+
+; Loop pointer for sound definition data
+.loopPointer::
+  ds 2 ; D32C - D32D
+
+; Counts up from zero to .noteLength, inverse of .lengthCountdown
+.lengthCounterUp::
+  ds 1 ; D32E
+
+; Audio loop counter; a segment loops [.loopCounter] times, then continues on.
+; Bit7 is set if this channel is used for sound effects.
+.loopCounter::
+  ds 1 ; D32F
+
+; Channel 3 data pointer
+wMusicChannel3:
+  ; The channel pointer points to the list of channel definitions which defines the overal structure of the song.
+.channelPointerLow:
+  ds 1 ; D330
+.channelPointerHigh:
+  ds 1 ; D331
+
+.lengthCountdown:: ; Counts down from the speed value retrieved from the speed table, when reaches zero the next note is played.
+  ds 1 ; D332
+
+.noteLength:: ; The length of the playing note in frames, retrieved from the speedtable and notelen selection.
+  ds 1 ; D333
+
+; Channel 1 definition data pointer, points to actual music instructions.
+.definitionPointerLow::
+  ds 1 ; D334
+.definitionPointerHigh::
+  ds 1 ; D335
+
+; Opcode 9D stores data here, this is the pointer to the waveform data
+.waveformPointerLow::
+  ds 1 ; D336
+.waveformPointerHigh::
+  ds 1 ; D337
+
+; Opcode 9D stores data here for volume control in bit6 and bit5 (copied to NR32)
+; Lower nibble seems to trigger specifics effects on values 1 and 5, details unknown.
+.volumeEffect::
+  ds 1 ; D338
+
+; Points to frequency data for NRx3 and NRx4
+.noteBaseFrequencyLow::
+  ds 1 ; D339
+.noteBaseFrequencyHigh::
+  ds 1 ; D33A
+
+.playingRest::
+  ds 1 ; D33B
+
+; Loop pointer for sound definition data
+.loopPointer::
+  ds 2 ; D33C - D31D
+
+; Counts up from zero to .noteLength, inverse of .lengthCountdown
+.lengthCounterUp::
+  ds 1 ; D33E
+
+; Audio loop counter; a segment loops [.loopCounter] times, then continues on.
+; Bit7 is set if this channel is used for sound effects.
+.loopCounter::
+  ds 1 ; D33F
+
+; Channel 4 data (a bit similar to D310, but the noise channel is quite different)
+wMusicChannel4::
+  ; The channel pointer points to the list of channel definitions which defines the overal structure of the song.
+.channelPointerLow:
+  ds 1 ; D340
+.channelPointerHigh:
+  ds 1 ; D341
 
 ; Unlabeled
-; Channel 3 data (similar to D310)
-wD330::
-  ds $10 ; D330 - D33F
+.wD342:
+  ds 2 ; D342 - D343
 
-; Unlabeled
-; Channel 4 data (similar to D310)
-wD340::
-  ds 4 ; D340 - D343
-
-; Unlabeled
-wD344::
+; Channel 1 definition data pointer, points to actual music instructions.
+.definitionPointerLow::
   ds 1 ; D344
-
-; Unlabeled
-wD345::
+.definitionPointerHigh::
   ds 1 ; D345
 
 ; Unlabeled
@@ -2715,7 +2826,11 @@ wD3E8::
 
 ; Unlabeled
 wD3E9::
-  ds 24 ; D3E9 - D400
+  ds 23 ; D3E9 - D3FF
+
+; Next WRAM is after the music section
+section "WRAM_D400", wramx[$D400], bank[1]
+ ds 1
 
 ; Room warps
 ; Each room can have 4 warp points. The room warps destination are defined below,
