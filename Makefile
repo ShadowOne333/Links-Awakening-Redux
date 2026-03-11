@@ -176,7 +176,7 @@ redux += redux.gbc
 src/main.redux.o: azlf-r1.gbc
 redux_ASFLAGS = -DLANG=RX -DVERSION=2
 redux_LDFLAGS = -O azlf-r1.gbc
-redux_FXFLAGS = --rom-version 2 --non-japanese --title "ZELDA" --game-id "AZLE"
+redux_FXFLAGS = --rom-version 2 --non-japanese --title "REDUX" --game-id "AZLE"
 
 #
 # Main targets
