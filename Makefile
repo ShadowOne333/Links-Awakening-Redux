@@ -41,7 +41,7 @@ FXFLAGS := \
 
 # Default target: build and test only the US 1.0 revision.
 # (Use `make all` to build and test all targets.)
-default: redux
+.DEFAULT_GOAL := redux
 
 #
 # Generic rules
@@ -176,7 +176,7 @@ redux += redux.gbc
 src/main.redux.o: azlf-r1.gbc
 redux_ASFLAGS = -DLANG=RX -DVERSION=2
 redux_LDFLAGS = -O azlf-r1.gbc
-redux_FXFLAGS = --rom-version 2 --non-japanese --title "REDUX" --game-id "AZLE"
+redux_FXFLAGS = --rom-version 2 --non-japanese --title "REDUX" --game-id "AZLX"
 
 #
 # Main targets
