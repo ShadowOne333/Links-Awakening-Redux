@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-RGBDS_VERSION="0.9.4"
+RGBDS_VERSION="1.0.1"
 RGBDS_DIR="rgbds"
 
 WIN64_URL="https://github.com/gbdev/rgbds/releases/download/v${RGBDS_VERSION}/rgbds-win64.zip"
