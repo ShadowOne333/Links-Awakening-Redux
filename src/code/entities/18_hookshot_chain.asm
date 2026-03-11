@@ -12,7 +12,7 @@ HookshotChainEntityHandler::
     ld   a, $02                                   ;; 18:7BEA $3E $02
     ldh  [hLinkInteractiveMotionBlocked], a       ;; 18:7BEC $E0 $A1
     ld   [wIsUsingHookshot], a                    ;; 18:7BEE $EA $A4 $C1
-    ld   [wIsLinkImmuneToCollisionDamage], a       ;; 18:7BF1 $EA $C6 $C1
+    ld   [wIsLinkImmuneToCollisionDamage], a      ;; 18:7BF1 $EA $C6 $C1
     ld   a, c                                     ;; 18:7BF4 $79
     inc  a                                        ;; 18:7BF5 $3C
     ld   [wHookshotEntityIndexPlusOne], a         ;; 18:7BF6 $EA $A6 $C1
@@ -26,7 +26,7 @@ HookshotChainEntityHandler::
     add  hl, de                                   ;; 18:7C08 $19
     ld   a, [hl]                                  ;; 18:7C09 $7E
     ldh  [hLinkAnimationState], a                 ;; 18:7C0A $E0 $9D
-    call RenderHookshotChain                            ;; 18:7C0C $CD $C8 $7C
+    call RenderHookshotChain                      ;; 18:7C0C $CD $C8 $7C
     call ReturnIfNonInteractive_18                ;; 18:7C0F $CD $E8 $7D
     ldh  a, [hFrameCounter]                       ;; 18:7C12 $F0 $E7
     and  $03                                      ;; 18:7C14 $E6 $03
@@ -38,7 +38,7 @@ HookshotChainEntityHandler::
 .jr_7C1C
     ldh  a, [hActiveEntityState]                  ;; 18:7C1C $F0 $F0
     and  a                                        ;; 18:7C1E $A7
-    jr   z, .notPullingLink                           ;; 18:7C1F $28 $18
+    jr   z, .notPullingLink                       ;; 18:7C1F $28 $18
 
 IF __PATCH_0__
     ld   hl, wEntitiesPosXTable
@@ -68,24 +68,24 @@ ENDC
     push bc                                       ;; 18:7C32 $C5
     call UpdateFinalLinkPosition                  ;; 18:7C33 $CD $A8 $21
     pop  bc                                       ;; 18:7C36 $C1
-    jr   .unloadIfTouchingLink                              ;; 18:7C37 $18 $0D
+    jr   .unloadIfTouchingLink                    ;; 18:7C37 $18 $0D
 
 .notPullingLink
     call UpdateEntityPosWithSpeed_18              ;; 18:7C39 $CD $5F $7E
     call GetEntityTransitionCountdown             ;; 18:7C3C $CD $05 $0C
-    jr   nz, .interactWithWorld                          ;; 18:7C3F $20 $13
+    jr   nz, .interactWithWorld                   ;; 18:7C3F $20 $13
 
     ld   a, $30                                   ;; 18:7C41 $3E $30
     call ApplyVectorTowardsLink_trampoline        ;; 18:7C43 $CD $AA $3B
 
 .unloadIfTouchingLink
     call CheckLinkCollisionWithEnemy_trampoline   ;; 18:7C46 $CD $5A $3B
-    jr   nc, .return                         ;; 18:7C49 $30 $63
+    jr   nc, .return                              ;; 18:7C49 $30 $63
 
     xor  a                                        ;; 18:7C4B $AF
-    ld   [wIsLinkImmuneToCollisionDamage], a                               ;; 18:7C4C $EA $C6 $C1
+    ld   [wIsLinkImmuneToCollisionDamage], a      ;; 18:7C4C $EA $C6 $C1
     call ClearEntityStatusBank18                  ;; 18:7C4F $CD $08 $7F
-    jr   .return                             ;; 18:7C52 $18 $5A
+    jr   .return                                  ;; 18:7C52 $18 $5A
 
 .interactWithWorld
     ; Damage enemies.
@@ -96,31 +96,31 @@ ENDC
     add  hl, bc                                   ;; 18:7C5F $09
     ld   a, [hl]                                  ;; 18:7C60 $7E
     and  a                                        ;; 18:7C61 $A7
-    jr   nz, HookshotChainPokeWall                          ;; 18:7C62 $20 $4B
+    jr   nz, HookshotChainPokeWall                ;; 18:7C62 $20 $4B
 
     call ApplyEntityInteractionWithBackground_trampoline ;; 18:7C64 $CD $23 $3B
     ld   a, [wIsIndoor]                           ;; 18:7C67 $FA $A5 $DB
     and  a                                        ;; 18:7C6A $A7
-    jr   z, .return                          ;; 18:7C6B $28 $41
+    jr   z, .return                               ;; 18:7C6B $28 $41
 
     ; Interact with hookshot bridges
-    call GetObjectUnderEntity                            ;; 18:7C6D $CD $93 $64
+    call GetObjectUnderEntity                     ;; 18:7C6D $CD $93 $64
     ld   hl, wEntitiesSpeedYTable                 ;; 18:7C70 $21 $50 $C2
     add  hl, bc                                   ;; 18:7C73 $09
     ld   a, [hl]                                  ;; 18:7C74 $7E
     and  a                                        ;; 18:7C75 $A7
-    jr   z, .return                          ;; 18:7C76 $28 $36
+    jr   z, .return                               ;; 18:7C76 $28 $36
 
     ld   e, OBJECT_HOOKSHOT_BRIDGE_PULL_DOWN      ;; 18:7C78 $1E $9E
     bit  7, a                                     ;; 18:7C7A $CB $7F
-    jr   nz, .compareObject                             ;; 18:7C7C $20 $02
+    jr   nz, .compareObject                       ;; 18:7C7C $20 $02
 
     ld   e, OBJECT_HOOKSHOT_BRIDGE_PULL_UP        ;; 18:7C7E $1E $9F
 
 .compareObject
     ldh  a, [hObjectUnderEntity]                  ;; 18:7C80 $F0 $AF
     cp   e                                        ;; 18:7C82 $BB
-    jr   nz, .return                         ;; 18:7C83 $20 $29
+    jr   nz, .return                              ;; 18:7C83 $20 $29
 
     ld   a, ENTITY_HOOKSHOT_BRIDGE                ;; 18:7C85 $3E $68
     call SpawnNewEntity_trampoline                ;; 18:7C87 $CD $86 $3B
@@ -137,7 +137,7 @@ ENDC
     ldh  a, [hObjectUnderEntity]                  ;; 18:7C9C $F0 $AF
     cp   OBJECT_HOOKSHOT_BRIDGE_PULL_DOWN         ;; 18:7C9E $FE $9E
     ld   a, $00                                   ;; 18:7CA0 $3E $00
-    jr   z, .setDirection                              ;; 18:7CA2 $28 $01
+    jr   z, .setDirection                         ;; 18:7CA2 $28 $01
 
     inc  a                                        ;; 18:7CA4 $3C
 
