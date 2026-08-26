@@ -1,5 +1,6 @@
 # [THE LEGEND OF ZELDA: LINK'S AWAKENING REDUX](https://www.romhacking.net/hacks/4672/)
 
+
 -------------------
 
 # **Index**
